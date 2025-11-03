@@ -6,3 +6,4 @@ firebase-admin
 moviepy
 modelscope
 python-dotenv
+packaging
