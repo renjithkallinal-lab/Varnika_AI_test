@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+requests
+python-multipart
+firebase-admin
+moviepy
+modelscope
+python-dotenv
