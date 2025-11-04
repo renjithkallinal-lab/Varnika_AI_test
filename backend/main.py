@@ -32,4 +32,4 @@ def generate(req: PromptRequest):
     buffer = BytesIO()
     image.save(buffer, format="PNG")
     img_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
-    return {"image_base64": img_base64}}
+    return {"image_base64": img_base64}
