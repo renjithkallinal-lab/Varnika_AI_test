@@ -1,6 +1,9 @@
 fastapi
+diffusers
+transformers
+accelerate
+safetensors
 uvicorn[standard]
-modelscope==1.11.0
 datasets==2.16.1
 python-multipart
 moviepy
@@ -16,6 +19,5 @@ firebase-admin==6.5.0
 packaging==24.1
 numpy==1.26.4
 tqdm==4.66.5
-moviepy==1.0.3
 imageio[ffmpeg]
 proglog
