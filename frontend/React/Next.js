@@ -1,4 +1,4 @@
-fetch("https://bullheadedly-transferrable-bertram.ngrok-free.dev/api/generate", {
+fetch("https://varnika-ai-5.onrender.com", {
   method: "POST",
   body: JSON.stringify({ prompt }),
 });
