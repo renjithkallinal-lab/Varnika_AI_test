@@ -2,24 +2,34 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from fastapi import FastAPI
 from pydantic import BaseModel
-from fastapi.middleware.cors import CORSMiddleware
-import uuid, os
-from.modelscope_generate import generate_text_to_video
-from.utils import upload_to_firebase
+from diffusers import StableDiffusionPipeline
+import torch
+from io import BytesIO
+import base64
 
 app = FastAPI()
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
-class Payload(BaseModel):
+# Load model
+print("🔄 Loading Stable Diffusion model...")
+pipe = StableDiffusionPipeline.from_pretrained(
+    "stabilityai/stable-diffusion-2-1",
+    torch_dtype=torch.float16
+)
+pipe.to("cuda" if torch.cuda.is_available() else "cpu")
+print("✅ Model loaded successfully")
+
+class PromptRequest(BaseModel):
     prompt: str
-    style: str = 'cinematic'
-    duration: int = 3
 
-@app.post('/generate')
-async def generate(p: Payload):
-    out_file = f"outputs/{uuid.uuid4()}.mp4"
-    os.makedirs('outputs', exist_ok=True)
-    # Blocking call for simplicity; in production move generation to background worker
-    generate_text_to_video(p.prompt, out_file, duration=p.duration, style=p.style)
-    public_url = upload_to_firebase(out_file)
-    return {"video_url": public_url}
+@app.get("/")
+def home():
+    return {"message": "Varnika AI Backend Running with Stable Diffusion"}
+
+@app.post("/generate")
+def generate(req: PromptRequest):
+    prompt = req.prompt
+    image = pipe(prompt).images[0]
+    buffer = BytesIO()
+    image.save(buffer, format="PNG")
+    img_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    return {"image_base64": img_base64}}
