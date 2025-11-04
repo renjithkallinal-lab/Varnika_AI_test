@@ -2,8 +2,8 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import uuid, os
-from modelscope_generate import generate_text_to_video
-from utils import upload_to_firebase
+from.modelscope_generate import generate_text_to_video
+from.utils import upload_to_firebase
 
 app = FastAPI()
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
