@@ -11,7 +11,7 @@ export default function VideoGenerator() {
   const generate = async () => {
     setLoading(true)
     try {
-      const res = await axios.post(process.env.NEXT_PUBLIC_BACKEND_URL + '/generate', { prompt, style, duration })
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_COLAB_API_URL}/generate`, { prompt, style, duration })
       setVideoUrl(res.data.video_url)
     } catch (e) {
       alert('Generation failed: ' + (e as any).message)
