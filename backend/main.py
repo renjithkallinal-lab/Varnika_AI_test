@@ -12,7 +12,7 @@ app = FastAPI()
 # Load model
 print("🔄 Loading Stable Diffusion model...")
 pipe = StableDiffusionPipeline.from_pretrained(
-    "stabilityai/stable-diffusion-2-1",
+    "runwayml/stable-diffusion-v1-5",
     torch_dtype=torch.float16
 )
 pipe.to("cuda" if torch.cuda.is_available() else "cpu")
