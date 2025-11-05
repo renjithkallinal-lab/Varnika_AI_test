@@ -1,4 +1,5 @@
-fetch(`${process.env.NEXT_PUBLIC_COLAB_API_URL}/api/generate`, {
+const response = await fetch(`${process.env.NEXT_PUBLIC_COLAB_API_URL}/generate`, {
   method: "POST",
+  headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ prompt }),
 });
