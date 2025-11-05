@@ -1,5 +1,3 @@
-import sys, os
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from fastapi import FastAPI
 from pydantic import BaseModel
 from diffusers import StableDiffusionPipeline
@@ -9,26 +7,23 @@ import base64
 
 app = FastAPI()
 
-# Load model
-print("🔄 Loading Stable Diffusion model...")
+print("🔄 Loading lightweight Stable Diffusion model...")
 pipe = StableDiffusionPipeline.from_pretrained(
-    "runwayml/stable-diffusion-v1-5",
-    torch_dtype=torch.float16
-)
-pipe.to("cuda" if torch.cuda.is_available() else "cpu")
-print("✅ Model loaded successfully")
+    "lambdalabs/sd-mini",
+    torch_dtype=torch.float32
+).to("cpu")
+print("✅ Model loaded successfully (using CPU)")
 
 class PromptRequest(BaseModel):
     prompt: str
 
 @app.get("/")
 def home():
-    return {"message": "Varnika AI Backend Running with Stable Diffusion"}
+    return {"message": "Varnika AI backend running (light test model)"}
 
 @app.post("/generate")
 def generate(req: PromptRequest):
-    prompt = req.prompt
-    image = pipe(prompt).images[0]
+    image = pipe(req.prompt).images[0]
     buffer = BytesIO()
     image.save(buffer, format="PNG")
     img_base64 = base64.b64encode(buffer.getvalue()).decode("utf-8")
